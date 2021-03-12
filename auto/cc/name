@@ -1,0 +1,67 @@
+
+# Copyright (C) Igor Sysoev
+
+
+echo $ngx_n "checking for C compiler ...$ngx_c"
+
+
+if [ "$CC" = cl ]; then
+    if `$NGX_WINE $CC -v 2>&1 \
+        | grep '^Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 13' \
+        >/dev/null 2>&1`; then
+
+        NGX_CC_NAME=msvc7
+        echo " Microsoft Visual C++ 7 compiler"
+
+    else
+        NGX_CC_NAME=msvc
+        echo " Microsoft Visual C++ compiler"
+    fi
+
+else
+if [ "$CC" = wcl386 ]; then
+    NGX_CC_NAME=owc
+    echo " Open Watcom C compiler"
+
+else
+if [ "$CC" = bcc32 ]; then
+    NGX_CC_NAME=bcc
+    echo " Borland C++ compiler"
+
+else
+if `$CC -v 2>&1 | grep 'gcc version' >/dev/null 2>&1`; then
+    NGX_CC_NAME=gcc
+    echo " GNU C compiler"
+
+else
+if `$CC -V 2>&1 | grep '^Intel(R) C' >/dev/null 2>&1`; then
+    NGX_CC_NAME=icc
+    echo " Intel C++ compiler"
+
+else
+if `$CC -V 2>&1 | grep 'Sun C' >/dev/null 2>&1`; then
+    NGX_CC_NAME=sunc
+    echo " Sun C compiler"
+
+else
+if `$CC -V 2>&1 | grep '^Compaq C' >/dev/null 2>&1`; then
+    NGX_CC_NAME=ccc
+    echo " Compaq C compiler"
+
+else
+if `$CC -V 2>&1 | grep '^aCC: ' >/dev/null 2>&1`; then
+    NGX_CC_NAME=acc
+    echo " HP aC++ compiler"
+
+else
+    NGX_CC_NAME=unknown
+    echo " unknown"
+
+fi # acc
+fi # ccc
+fi # sunc
+fi # icc
+fi # gcc
+fi # bcc
+fi # owc
+fi # msvc
